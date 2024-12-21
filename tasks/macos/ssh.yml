@@ -1,0 +1,77 @@
+- name: Ensure .ssh directory exists
+  become_user: root
+  file:
+    dest: "{{ lookup('env', 'HOME') }}/.ssh"
+    mode: 0700
+    state: directory
+  tags:
+    - dotfiles
+    - install
+    - ssh
+
+- name: Install SSH private key
+  become_user: root
+  copy:
+    src: "{{ source_key }}"
+    dest: "{{ dest_key }}"
+    mode: 0600
+  tags:
+    - dotfiles
+    - install
+    - ssh
+
+- name: Install SSH public key
+  become_user: root
+  copy:
+    src: "{{ source_key }}.pub"
+    dest: "{{ dest_key }}.pub"
+    mode: 0644
+  tags:
+    - dotfiles
+    - install
+    - ssh
+
+- name: Ensure SSH known_hosts file exists
+  become_user: root
+  file:
+    dest: "{{ lookup('env', 'HOME') }}/.ssh/known_hosts"
+    mode: 0644
+    state: touch
+  tags:
+    - dotfiles
+    - install
+    - ssh
+
+- name: Add GitHub to known_hosts
+  become_user: root
+  shell: |
+    ssh-keyscan github.com >> ~/.ssh/known_hosts
+  args:
+    creates: "{{ lookup('env', 'HOME') }}/.ssh/known_hosts"
+  tags:
+    - dotfiles
+    - install
+    - ssh
+
+- name: Install SSH config
+  become_user: root
+  copy:
+    src: "templates/ssh_config"
+    dest: "{{ lookup('env', 'HOME') }}/.ssh/config"
+    mode: 0600
+  tags:
+    - dotfiles
+    - install
+    - ssh
+
+- name: Set authorized key for SSH access
+  become_user: root
+  authorized_key:
+    user: "{{ lookup('env', 'USER') }}"
+    state: present
+    key: "{{ lookup('env', 'HOME') }}/.ssh/id_ed25519_github.pub"
+  tags:
+    - dotfiles
+    - install
+    - ssh
+

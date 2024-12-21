@@ -1,0 +1,23 @@
+---
+- name: Install zsh
+  shell: brew install zsh
+  args:
+    executable: /bin/zsh
+
+- name: Install oh-my-zsh
+  shell: |
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+  args:
+    creates: "{{ lookup('env', 'HOME') }}/.oh-my-zsh"
+
+- name: Set zsh as default shell
+  shell: chsh -s $(which zsh)
+  args:
+    executable: /bin/zsh
+
+- name: Copy custom zshrc
+  copy:
+    src: templates/.zshrc
+    dest: "{{ lookup('env', 'HOME') }}/.zshrc"
+    mode: 0644
+
