@@ -8,10 +8,59 @@
       apt: update_cache=yes
       changed_when: False
   tasks:
-    - include: tasks/ssh.yml
-    - include: tasks/node-setup.yml
-    - include: tasks/npm-packages.yml
-    - include: tasks/zsh-setup.yml
-    - include: tasks/nvim-setup.yml
-    - include: tasks/dotfiles.yml
-    - include: tasks/personal-projects.yml
+    - name: Run tasks for macOS ssh
+      include: tasks/macos/ssh.yml
+      when: ansible_os_family == 'Darwin'
+
+    - name: Run tasks for macOS Node setup
+      include: tasks/macos/node-setup.yml
+      when: ansible_os_family == 'Darwin'
+
+    - name: Run tasks for macOS npm packages
+      include: tasks/macos/npm-packages.yml
+      when: ansible_os_family == 'Darwin'
+
+    - name: Run tasks for macOS ZSH setup
+      include: tasks/macos/zsh-setup.yml
+      when: ansible_os_family == 'Darwin'
+
+    - name: Run tasks for macOS Neovim setup
+      include: tasks/macos/nvim-setup.yml
+      when: ansible_os_family == 'Darwin'
+
+    - name: Run tasks for macOS dotfiles
+      include: tasks/macos/dotfiles.yml
+      when: ansible_os_family == 'Darwin'
+
+    - name: Run tasks for macOS personal projects
+      include: tasks/macos/personal-projects.yml
+      when: ansible_os_family == 'Darwin'
+
+    - name: Run tasks for Linux ssh
+      include: tasks/linux/ssh.yml
+      when: ansible_os_family == 'Linux'
+
+    - name: Run tasks for Linux Node setup
+      include: tasks/linux/node-setup.yml
+      when: ansible_os_family == 'Linux'
+
+    - name: Run tasks for Linux npm packages
+      include: tasks/linux/npm-packages.yml
+      when: ansible_os_family == 'Linux'
+
+    - name: Run tasks for Linux ZSH setup
+      include: tasks/linux/zsh-setup.yml
+      when: ansible_os_family == 'Linux'
+
+    - name: Run tasks for Linux Neovim setup
+      include: tasks/linux/nvim-setup.yml
+      when: ansible_os_family == 'Linux'
+
+    - name: Run tasks for Linux dotfiles
+      include: tasks/linux/dotfiles.yml
+      when: ansible_os_family == 'Linux'
+
+    - name: Run tasks for Linux personal projects
+      include: tasks/linux/personal-projects.yml
+      when: ansible_os_family == 'Linux'
+
